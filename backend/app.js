@@ -1,8 +1,13 @@
 const express = require("express");
 const app = express();
 const port = 8080;
-const mongoDB = require("./db");
+
+// connect DB
+const mongoDB = require("./config/database.js");
 mongoDB();
+
+app.use(express.json());
+app.use("/api", require("./src/routes/user"));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
