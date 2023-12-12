@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
-const mongoURI =
-  "mongodb+srv://ahmadwahlah:p2NCuVaxtrvVS8RR@cluster0.boxyfrz.mongodb.net/quickbite?retryWrites=true&w=majority";
+const config = require("config");
+
+const mongoURI = config.get("mongoURI");
 
 const mongoDB = async () => {
   try {
