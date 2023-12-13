@@ -1,10 +1,14 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const port = 8080;
 
 // connect DB
 const mongoDB = require("./config/database.js");
 mongoDB();
+
+// cors policy
+app.use(cors());
 
 app.use(express.json());
 app.use("/api", require("./src/routes/user"));
