@@ -23,8 +23,8 @@ router.post(
     try {
       await User.create({
         name: req.body.name,
-        password: req.body.password,
         email: req.body.email,
+        password: req.body.password,
         location: req.body.location,
       });
 
@@ -32,6 +32,39 @@ router.post(
     } catch (error) {
       console.log("Error creating user: ", error);
       res.json({ success: false });
+    }
+  }
+);
+
+// @route POST api/user/login
+// @desc login user
+// @access Public
+
+router.post(
+  "/user/login",
+  [
+    check("email", "Email is incorrect").isEmail(),
+    check("password", "Password is incorrect").isLength({ min: 5 }),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      let email = req.body.email;
+      const userData = await User.findOne({ email });
+      if (!userData) {
+        return res.status(400).json({ errors: "Incorrect email!" });
+      }
+
+      if (userData.password !== req.body.password) {
+        return res.status(400).json({ errors: "Incorrect Password" });
+      }
+
+      return res.status(200).json({ success: "Logged in successfully" });
+    } catch (error) {
+      console.log("Error logging in: ", error);
     }
   }
 );
