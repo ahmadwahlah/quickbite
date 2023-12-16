@@ -11,13 +11,15 @@ const mongoDB = async () => {
     // fetching data from mongoDB
     const foodItemsCollection = mongoose.connection.db.collection("food_items");
     try {
-      const fetchedData = await foodItemsCollection.find({}).toArray();
+      global.fetchedData = await foodItemsCollection.find({}).toArray();
       // console.log(fetchedData);
     } catch (error) {
-      console.error("Error fetching data from MongoDB:", error.message);
+      if (error) throw error;
+      return res.status(500).send(`Server Error: ${error.message}`);
     }
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error.message);
+    if (error) throw error;
+    return res.status(500).send(`Server Error: ${error.message}`);
   }
 };
 

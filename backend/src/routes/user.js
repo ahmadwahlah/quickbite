@@ -88,7 +88,8 @@ router.post(
         .status(200)
         .json({ success: "Logged in successfully", authToken: authToken });
     } catch (error) {
-      console.log("Error logging in: ", error);
+      if (error) throw error;
+      return res.status(500).send(`Server Error: ${error.message}`);
     }
   }
 );
