@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Carousel() {
+export default function Carousel({ search, setSearch }) {
   return (
     <div>
       <div
@@ -11,20 +11,24 @@ export default function Carousel() {
       >
         <div className="carousel-inner" style={{ maxHeight: "600px" }}>
           <div className="carousel-caption" style={{ zIndex: "2" }}>
-            <form className="d-flex">
+            <div className="d-flex justify-content-center">
               <input
                 className="form-control me-2"
                 type="search"
                 placeholder="Search"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
                 aria-label="Search"
               />
-              <button
+              {/* <button
                 className="btn btn-outline-success text-white bg-success"
                 type="submit"
               >
                 Search
-              </button>
-            </form>
+              </button> */}
+            </div>
           </div>
           <div className="carousel-item active">
             <img

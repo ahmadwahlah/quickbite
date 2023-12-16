@@ -1,7 +1,10 @@
 import React from "react";
 import { useState } from "react";
 
-export default function Card() {
+export default function Card({ name, desc, options, src }) {
+  //options
+  let priceOptions = Object.keys(options);
+
   // setting quantity of items
   const [value, setValue] = useState(1);
 
@@ -17,17 +20,19 @@ export default function Card() {
     }
   };
   return (
-    <div>
+    <div className="d-flex align-items-center justify-content-center">
       {" "}
       <div className="card mt-3" style={{ width: "18rem", maxHeight: "360px" }}>
         <img
-          src="https://source.unsplash.com/random/1920x1080/?burger"
+          // src="https://source.unsplash.com/random/1920x1080/?burger"
+          src={src}
           className="card-img-top"
           alt="..."
+          style={{}}
         />
         <div className="card-body">
-          <h5 className="card-title">Card title</h5>
-          <p className="card-text">Some quick</p>
+          <h5 className="card-title">{name}</h5>
+          {/* <p className="card-text">{desc}</p> */}
           <div className="container h-100 w-100 ">
             <div className="d-flex align-items-center">
               <button
@@ -46,12 +51,13 @@ export default function Card() {
                 +
               </button>
               <select className="mx-5 p-2 h-100 bg-success rounded text-white">
-                <option key={"Half"} value={"Half"}>
-                  Half
-                </option>
-                <option key={"Full"} value={"Full"}>
-                  Full
-                </option>
+                {priceOptions.map((data) => {
+                  return (
+                    <option key={data} value={data}>
+                      {data}
+                    </option>
+                  );
+                })}
               </select>
             </div>
             <div className="container"></div>
