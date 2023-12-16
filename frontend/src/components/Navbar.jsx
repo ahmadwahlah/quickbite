@@ -1,7 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
+  };
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-success">
@@ -21,23 +26,60 @@ export default function Navbar() {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <Link className="nav-link" aria-current="page" to="/">
-                  Home
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/login ">
+            <ul className="navbar-nav me-auto">
+              {localStorage.getItem("authToken") ? (
+                <li className="nav-item">
+                  <Link
+                    className="nav-link active fs-5"
+                    aria-current="page"
+                    to="/"
+                  >
+                    Home
+                  </Link>
+                </li>
+              ) : (
+                ""
+              )}
+              {localStorage.getItem("authToken") ? (
+                <li className="nav-item">
+                  <Link
+                    className="nav-link active fs-5"
+                    aria-current="page"
+                    to="/"
+                  >
+                    My Orders
+                  </Link>
+                </li>
+              ) : (
+                ""
+              )}
+            </ul>
+
+            {!localStorage.getItem("authToken") ? (
+              <div className="d-flex">
+                {/* <Link className="btn bg-white text-success mx-1" to="/login ">
                   Login
                 </Link>
-              </li>
-              <li>
-                <Link className="nav-link" to="/signup ">
+
+                <Link className="btn bg-white text-success mx-1" to="/signup ">
                   SignUp
+                </Link> */}
+              </div>
+            ) : (
+              <div className="d-flex">
+                <Link className="btn bg-white text-success mx-1" to="/ ">
+                  My Cart
                 </Link>
-              </li>
-            </ul>
+
+                <Link
+                  className="btn bg-white text-danger mx-1"
+                  to="/login"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </nav>
