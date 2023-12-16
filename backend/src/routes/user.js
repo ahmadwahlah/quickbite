@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const config = require("config");
 const { check, validationResult } = require("express-validator");
+
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
 
@@ -20,11 +24,15 @@ router.post(
       return res.status(400).json({ errors: error.array() });
     }
 
+    const plainPassword = req.body.password;
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(plainPassword, salt);
+
     try {
       await User.create({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password,
+        password: hash,
         location: req.body.location,
       });
 
@@ -58,11 +66,27 @@ router.post(
         return res.status(400).json({ errors: "Incorrect email!" });
       }
 
-      if (userData.password !== req.body.password) {
+      const isMatch = await bcrypt.compare(
+        req.body.password,
+        userData.password
+      );
+      if (!isMatch) {
         return res.status(400).json({ errors: "Incorrect Password" });
       }
 
-      return res.status(200).json({ success: "Logged in successfully" });
+      const payload = {
+        user: {
+          id: userData.id,
+          email: userData.email,
+        },
+      };
+      const authToken = jwt.sign(payload, config.get("jwtSecret"), {
+        expiresIn: 420000,
+      });
+
+      return res
+        .status(200)
+        .json({ success: "Logged in successfully", authToken: authToken });
     } catch (error) {
       console.log("Error logging in: ", error);
     }
