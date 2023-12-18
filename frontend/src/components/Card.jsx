@@ -1,19 +1,78 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
+import { useDispatchCart, useCart } from "../contexts/ContextReducer";
 
-export default function Card({ name, desc, options, src }) {
-  //options
-  let priceOptions = Object.keys(options);
-
-  // setting quantity of items
+export default function Card({ foodItem, options }) {
   const [value, setValue] = useState(1);
+  const [size, setSize] = useState("");
 
+  let dispatch = useDispatchCart();
+  let data = useCart();
+
+  // final price
+  let finalPrice = value * parseInt(options[size]);
+
+  const handleAddToCart = async () => {
+    let food = [];
+    for (const item of data) {
+      if (item.id === foodItem._id) {
+        food = item;
+        break;
+      }
+    }
+
+    if (food.length !== 0) {
+      if (food.size === size) {
+        await dispatch({
+          type: "UPDATE",
+          id: foodItem._id,
+          price: finalPrice,
+          qty: value,
+        });
+        return;
+      } else if (food.size !== size) {
+        await dispatch({
+          type: "ADD",
+          id: foodItem._id,
+          name: foodItem.name,
+          img: foodItem.img,
+          price: finalPrice,
+          qty: value,
+          size: size,
+        });
+        console.log("Size different so simply ADD one more to the list");
+        return;
+      }
+      return;
+    }
+    await dispatch({
+      type: "ADD",
+      id: foodItem._id,
+      name: foodItem.name,
+      img: foodItem.img,
+      price: finalPrice,
+      qty: value,
+      size: size,
+    });
+    // console.log(data);
+  };
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
+
+  //  size of item
+  let priceOptions = Object.keys(options);
+  const priceRef = useRef();
+  useEffect(() => {
+    setSize(priceRef.current.value);
+  }, []);
+
+  //  quantity of item
   const increment = () => {
     if (value < 9) {
       setValue((prevValue) => prevValue + 1);
     }
   };
-
   const decrement = () => {
     if (value > 1) {
       setValue((prevValue) => prevValue - 1);
@@ -22,17 +81,17 @@ export default function Card({ name, desc, options, src }) {
   return (
     <div className="d-flex align-items-center justify-content-center">
       {" "}
-      <div className="card mt-3" style={{ width: "18rem", maxHeight: "360px" }}>
+      <div className="card mt-3" style={{ width: "20rem", maxHeight: "" }}>
         <img
           // src="https://source.unsplash.com/random/1920x1080/?burger"
-          src={src}
+          src={foodItem.img}
           className="card-img-top"
           alt="..."
           style={{}}
         />
         <div className="card-body">
-          <h5 className="card-title">{name}</h5>
-          {/* <p className="card-text">{desc}</p> */}
+          <h5 className="card-title">{foodItem.name}</h5>
+          {/* <p className="card-text">{foofItem.description}</p> */}
           <div className="container h-100 w-100 ">
             <div className="d-flex align-items-center">
               <button
@@ -50,7 +109,13 @@ export default function Card({ name, desc, options, src }) {
               >
                 +
               </button>
-              <select className="mx-5 p-2 h-100 bg-success rounded text-white">
+              <select
+                className="mx-5 p-2 h-100 bg-success rounded text-white"
+                ref={priceRef}
+                onChange={(e) => {
+                  setSize(e.target.value);
+                }}
+              >
                 {priceOptions.map((data) => {
                   return (
                     <option key={data} value={data}>
@@ -61,8 +126,15 @@ export default function Card({ name, desc, options, src }) {
               </select>
             </div>
             <div className="container"></div>
-            <div className="d-flex my-2 h-100 fs-5">Total Price</div>
+            <div className="d-flex my-2 h-100 fs-5">PKR {finalPrice}/-</div>
           </div>
+          <hr />
+          <button
+            className="btn btn-success justify-center ms-2"
+            onClick={handleAddToCart}
+          >
+            Add to Cart
+          </button>
         </div>
       </div>
     </div>
