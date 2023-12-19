@@ -32,6 +32,9 @@ const reducer = (state, action) => {
         }
         return food;
       });
+    case "DROP":
+      let empArray = [];
+      return empArray;
 
     default:
       console.error("Error in Reducer");

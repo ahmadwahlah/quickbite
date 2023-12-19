@@ -31,6 +31,7 @@ export default function Login() {
       if (!res.success) {
         alert("Enter valid credentials");
       } else {
+        localStorage.setItem("email", info.email);
         localStorage.setItem("authToken", res.authToken);
         navigate("/");
       }
