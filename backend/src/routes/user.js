@@ -59,19 +59,24 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+
     try {
       let email = req.body.email;
       const userData = await User.findOne({ email });
+
       if (!userData) {
-        return res.status(400).json({ errors: "Incorrect email!" });
+        return res.status(400).json({ errors: [{ msg: "Incorrect email!" }] });
       }
 
       const isMatch = await bcrypt.compare(
         req.body.password,
         userData.password
       );
+
       if (!isMatch) {
-        return res.status(400).json({ errors: "Incorrect Password" });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Incorrect password" }] });
       }
 
       const payload = {
@@ -80,16 +85,20 @@ router.post(
           email: userData.email,
         },
       };
+
       const authToken = jwt.sign(payload, config.get("jwtSecret"), {
         expiresIn: 420000,
       });
 
-      return res
-        .status(200)
-        .json({ success: "Logged in successfully", authToken: authToken });
+      return res.status(200).json({
+        success: "Logged in successfully",
+        authToken: authToken,
+      });
     } catch (error) {
-      if (error) throw error;
-      return res.status(500).send(`Server Error: ${error.message}`);
+      console.error("Error during login:", error);
+      return res
+        .status(500)
+        .send("Server Error: Unable to process your request");
     }
   }
 );

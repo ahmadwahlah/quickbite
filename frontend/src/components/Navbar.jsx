@@ -66,13 +66,13 @@ export default function Navbar() {
 
             {!localStorage.getItem("authToken") ? (
               <div className="d-flex">
-                {/* <Link className="btn bg-white text-success mx-1" to="/login ">
-                  Login
+                <Link className="btn bg-white text-success mx-1" to="/login ">
+                  Sign In
                 </Link>
 
                 <Link className="btn bg-white text-success mx-1" to="/signup ">
-                  SignUp
-                </Link> */}
+                  Sign Up
+                </Link>
               </div>
             ) : (
               <div className="d-flex">
