@@ -34,4 +34,14 @@ router.post("/order", async (req, res) => {
   }
 });
 
+router.post("/orderHistory", async (req, res) => {
+  try {
+    let myData = await Order.findOne({ email: req.body.email });
+    res.json({ orderData: myData });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error", error.message);
+  }
+});
+
 module.exports = router;

@@ -54,7 +54,7 @@ export default function Navbar() {
                   <Link
                     className="nav-link active fs-5"
                     aria-current="page"
-                    to="/"
+                    to="/myorders"
                   >
                     My Orders
                   </Link>
