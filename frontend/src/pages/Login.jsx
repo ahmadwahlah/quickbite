@@ -158,10 +158,30 @@ export default function Login() {
               <div className="invalid-feedback">{errors.password}</div>
             )}
           </div>
-          <button type="submit" className="my-3 me-3 btn btn-success">
+          <button
+            type="submit"
+            className="my-3 me-3 btn btn-success"
+            style={{
+              transition: "transform 0.3s ease",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.05)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
             Sign In
           </button>
-          <Link className="my-3 btn btn-danger" to="/signup">
+          <Link
+            className="my-3 btn btn-danger"
+            to="/signup"
+            style={{
+              transition: "transform 0.3s ease",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.05)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
             I'm a new user
           </Link>
         </form>

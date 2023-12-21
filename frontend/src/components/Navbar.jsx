@@ -1,14 +1,20 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Badge from "react-bootstrap/Badge";
-import Modal from "./Modal";
 
+import Modal from "./Modal";
 import Cart from "../pages/Cart";
 import { useCart } from "../contexts/ContextReducer";
+
+// icons
+import { FaHome, FaShoppingCart } from "react-icons/fa";
+import { IoIosListBox } from "react-icons/io";
+import { BsPersonFillAdd } from "react-icons/bs";
+import { PiSignInBold, PiSignOutBold } from "react-icons/pi";
 
 export default function Navbar() {
   const [cartView, setCartView] = useState();
   const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("email");
@@ -16,11 +22,22 @@ export default function Navbar() {
   };
 
   let data = useCart();
+
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-success">
         <div className="container-fluid">
-          <Link className="navbar-brand fs-1 fst-italic" to="/">
+          <Link
+            className="navbar-brand fs-1 fst-italic"
+            to="/"
+            style={{
+              transition: "transform 0.3s ease",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.05)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
             QuickBite
           </Link>
           <button
@@ -37,26 +54,47 @@ export default function Navbar() {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav me-auto">
               {localStorage.getItem("authToken") ? (
-                <li className="nav-item">
+                <li className="nav-item ">
                   <Link
-                    className="nav-link active fs-5"
+                    className="nav-link active d-flex ms-4 px-1 btn bg-success text-white align-items-center  "
                     aria-current="page"
                     to="/"
+                    style={{
+                      transition: "transform 0.3s ease",
+                    }}
+                    onMouseOver={(e) =>
+                      (e.currentTarget.style.transform = "scale(1.05)")
+                    }
+                    onMouseOut={(e) =>
+                      (e.currentTarget.style.transform = "scale(1)")
+                    }
                   >
-                    Home
+                    <FaHome size={20} className="  me-1" />
+                    <div className="fs-6 ">Home</div>
                   </Link>
                 </li>
               ) : (
                 ""
               )}
+
               {localStorage.getItem("authToken") ? (
                 <li className="nav-item">
                   <Link
-                    className="nav-link active fs-5"
+                    className="nav-link active d-flex ms-2 px-1 btn bg-success text-white align-items-center"
                     aria-current="page"
                     to="/myorders"
+                    style={{
+                      transition: "transform 0.3s ease",
+                    }}
+                    onMouseOver={(e) =>
+                      (e.currentTarget.style.transform = "scale(1.05)")
+                    }
+                    onMouseOut={(e) =>
+                      (e.currentTarget.style.transform = "scale(1)")
+                    }
                   >
-                    My Orders
+                    <IoIosListBox size={20} className="  me-1" />
+                    <div className="fs-6 ">Order History</div>
                   </Link>
                 </li>
               ) : (
@@ -66,26 +104,66 @@ export default function Navbar() {
 
             {!localStorage.getItem("authToken") ? (
               <div className="d-flex">
-                <Link className="btn bg-white text-success mx-1" to="/login ">
-                  Sign In
+                <Link
+                  className="d-flex btn bg-white text-success mx-1 align-items-center"
+                  to="/login "
+                  style={{
+                    transition: "transform 0.3s ease",
+                  }}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.05)")
+                  }
+                  onMouseOut={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
+                >
+                  <PiSignInBold size={20} className="  me-1" />
+                  <div className="fs-6 "> Sign In</div>
                 </Link>
 
-                <Link className="btn bg-white text-success mx-1" to="/signup ">
-                  Sign Up
+                <Link
+                  className="d-flex btn bg-white text-success mx-1 align-items-center"
+                  to="/signup "
+                  style={{
+                    transition: "transform 0.3s ease",
+                  }}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.05)")
+                  }
+                  onMouseOut={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
+                >
+                  <BsPersonFillAdd size={20} className="  me-1" />
+                  <div className="fs-6 "> Sign Up</div>
                 </Link>
               </div>
             ) : (
               <div className="d-flex">
                 <Link
-                  className="btn bg-white text-success mx-1"
+                  className="d-flex align-items-center btn bg-white text-success mx-2 position-relative"
                   onClick={() => {
                     setCartView(true);
                   }}
+                  style={{
+                    transition: "transform 0.3s ease",
+                  }}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.05)")
+                  }
+                  onMouseOut={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
                 >
-                  My Cart
-                  <Badge className="ms-2" pill bg="danger">
-                    {data.length}
-                  </Badge>
+                  <FaShoppingCart size={20} className="  me-1" />
+                  <div className="fs-6 "> Cart</div>
+                  {data.length > 0 ? (
+                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                      {data.length}
+                    </span>
+                  ) : (
+                    ""
+                  )}
                 </Link>
                 {cartView ? (
                   <Modal
@@ -97,11 +175,21 @@ export default function Navbar() {
                   </Modal>
                 ) : null}
                 <Link
-                  className="btn bg-white text-danger mx-1"
+                  className="d-flex align-items-center btn bg-white text-danger mx-2"
                   to="/login"
                   onClick={handleLogout}
+                  style={{
+                    transition: "transform 0.3s ease",
+                  }}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.05)")
+                  }
+                  onMouseOut={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
                 >
-                  Logout
+                  <PiSignOutBold size={20} className="  me-1" />
+                  <div className="fs-6 "> Logout</div>
                 </Link>
               </div>
             )}
