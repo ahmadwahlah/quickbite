@@ -11,35 +11,52 @@ const User = require("../models/User");
 // @route POST api/user/create
 // @desc creating new user
 // @access Public
+
 router.post(
   "/user/create",
   [
-    check("name", "Name must be 3 Characters").isLength({ min: 3 }),
-    check("email", "Incorrect Email").isEmail(),
-    check("password", "Incorrect Password Length").isLength({ min: 5 }),
+    check("email", "Invalid email address").isEmail(),
+    check("password", "Password must be at least 5 characters").isLength({
+      min: 5,
+    }),
   ],
   async (req, res) => {
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-      return res.status(400).json({ errors: error.array() });
-    }
-
-    const plainPassword = req.body.password;
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(plainPassword, salt);
-
     try {
-      await User.create({
-        name: req.body.name,
-        email: req.body.email,
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        // Validation failed
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const { name, email, location } = req.body;
+      const plainPassword = req.body.password;
+
+      const existingUser = await User.findOne({ email });
+
+      if (existingUser) {
+        // User with the given email already exists
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "User with this email already exists" }] });
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(plainPassword, salt);
+
+      const newUser = new User({
+        name,
+        email,
         password: hash,
-        location: req.body.location,
+        location,
       });
+
+      await newUser.save();
 
       res.json({ success: true });
     } catch (error) {
-      console.log("Error creating user: ", error);
-      res.json({ success: false });
+      console.error("Error creating user:", error);
+      res.status(500).json({ success: false, error: "Internal Server Error" });
     }
   }
 );

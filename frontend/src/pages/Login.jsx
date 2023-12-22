@@ -117,7 +117,7 @@ export default function Login() {
 
       <div className="container mt-4 mt-md-5 d-md-flex ">
         <div className="col-md-3"></div>
-        <form onSubmit={handleSubmit} className="  mt-lg-5 col-md-6">
+        <form onSubmit={handleSubmit} className="mt-lg-5 col-md-6">
           <h1 className="text-center h1">Sign In</h1>
           <div className="mb-3 mt-2 mt-lg-4">
             <label htmlFor="email" className="form-label">
