@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCart, useDispatchCart } from "../contexts/ContextReducer";
 
+import { MdDelete } from "react-icons/md";
+
 export default function Cart() {
+  const [snackbarData, setSnackbarData] = useState({
+    showSnackbar: false,
+    message: "",
+    success: false,
+  });
+
   let data = useCart();
   let dispatch = useDispatchCart();
   if (data.length === 0) {
     return (
       <>
-        <div className="m-5 w-100 text-success text-center fs-3">
-          The Cart is Empty!
+        <div className="my-5 w-100 text-success text-center fs-2">
+          Your Cart is Empty!
         </div>
       </>
     );
@@ -33,13 +41,24 @@ export default function Cart() {
 
     console.log("Order Response: ", response.json());
     if (response.status === 200) {
-      dispatch({ type: "DROP" });
+      setSnackbarData({
+        showSnackbar: true,
+        message: "Thank you! Your order is confirmed.",
+        success: true,
+      });
+      setTimeout(() => {
+        setSnackbarData({ showSnackbar: false, message: "" });
+        dispatch({ type: "DROP" });
+      }, 2000);
     }
   };
 
   return (
     <>
-      <div className="container m-auto mt-5 table-responsive table-responsive-sm table-responsive-md text-white">
+      <div
+        className="container m-auto mt-5 table-responsive table-responsive-sm table-responsive-md text-white"
+        style={{ height: "80%", overflowY: "auto" }}
+      >
         <table className="table">
           <thead
             className="text-success fs-4"
@@ -68,11 +87,28 @@ export default function Cart() {
                 <td>{food.price}</td>
                 <td>
                   <button type="button" className="btn p-0">
-                    <img
-                      src=""
-                      alt="delete"
+                    <MdDelete
+                      size={24}
+                      style={{
+                        color: "#cc0000",
+                        transition: "transform 0.3s ease",
+                      }}
+                      onMouseOver={(e) =>
+                        (e.currentTarget.style.transform = "scale(1.1)")
+                      }
+                      onMouseOut={(e) =>
+                        (e.currentTarget.style.transform = "scale(1)")
+                      }
                       onClick={() => {
                         dispatch({ type: "REMOVE", index: index });
+                        setSnackbarData({
+                          showSnackbar: true,
+                          message: "Item successfully removed from your cart.",
+                          success: false,
+                        });
+                        setTimeout(() => {
+                          setSnackbarData({ showSnackbar: false, message: "" });
+                        }, 2000);
                       }}
                     />
                   </button>
@@ -82,15 +118,45 @@ export default function Cart() {
           </tbody>
         </table>
         <div>
-          <h1 className="fs-2 mt-2"> Total Price : PKR {totalPrice}/-</h1>
+          <h1 className="fs-2 mt-4"> Total Price : PKR {totalPrice}/-</h1>
         </div>
         <div>
           <button
-            className="btn bg-success mt-4 text-white"
+            className="btn bg-success mt-3 mb-4 text-white"
             onClick={handleCheckOut}
+            style={{
+              transition: "transform 0.3s ease",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.05)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
           >
             Check Out
           </button>
+        </div>
+      </div>
+
+      {/* SnackBar */}
+      <div
+        className={`toast m-3 m-md-4 position-fixed bottom-0 start-0 text-white ${
+          snackbarData.success ? "bg-success" : "bg-danger"
+        }  ${snackbarData.showSnackbar ? "show" : ""}`}
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div className="d-flex">
+          <div className="toast-body">{snackbarData.message}</div>
+          <button
+            type="button"
+            className="btn-close me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+            onClick={() =>
+              setSnackbarData({ showSnackbar: false, message: "" })
+            }
+          ></button>
         </div>
       </div>
     </>

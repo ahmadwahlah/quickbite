@@ -29,8 +29,14 @@ export default function Modal({ children, onClose }) {
       <div style={MODAL_STYLES}>
         <button
           className="btn bg-danger fs-4"
-          style={{ marginLeft: "90%", marginTop: "-35px" }}
+          style={{
+            marginLeft: "90%",
+            marginTop: "-25px",
+            transition: "transform 0.3s ease",
+          }}
           onClick={onClose}
+          onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+          onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
           {" "}
           X{" "}
