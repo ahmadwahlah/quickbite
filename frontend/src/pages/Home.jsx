@@ -52,40 +52,40 @@ export default function Home() {
       </div>
 
       <div className="container">
-        {foodCategories != []
-          ? foodCategories.map((data) => {
+        {foodCategories
+          .filter((data) => {
+            // Filter categories that have matching items
+            return foodItems.some((item) => {
               return (
-                <div key={data._id} className="row mb-3 ">
-                  <div className="fs-3 my-3">{data.CategoryName}</div>
-                  <hr />
-                  {foodItems != []
-                    ? foodItems
-                        .filter((item) => {
-                          return (
-                            item.CategoryName === data.CategoryName &&
-                            item.name
-                              .toLowerCase()
-                              .includes(search.toLocaleLowerCase())
-                          );
-                        })
-                        .map((filterItems) => {
-                          return (
-                            <div
-                              key={filterItems._id}
-                              className="col-12 col-md-6 col-lg-3 "
-                            >
-                              <Card
-                                foodItem={filterItems}
-                                options={filterItems.options[0]}
-                              />
-                            </div>
-                          );
-                        })
-                    : []}
-                </div>
+                item.CategoryName === data.CategoryName &&
+                item.name.toLowerCase().includes(search.toLocaleLowerCase())
               );
-            })
-          : []}
+            });
+          })
+          .map((data) => (
+            <div key={data._id} className="row mb-3 ">
+              <div className="fs-3 my-3">{data.CategoryName}</div>
+              <hr />
+              {foodItems
+                .filter((item) => {
+                  return (
+                    item.CategoryName === data.CategoryName &&
+                    item.name.toLowerCase().includes(search.toLocaleLowerCase())
+                  );
+                })
+                .map((filterItems) => (
+                  <div
+                    key={filterItems._id}
+                    className="col-12 col-md-6 col-lg-3"
+                  >
+                    <Card
+                      foodItem={filterItems}
+                      options={filterItems.options[0]}
+                    />
+                  </div>
+                ))}
+            </div>
+          ))}
       </div>
 
       <div>

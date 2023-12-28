@@ -23,7 +23,7 @@ const reducer = (state, action) => {
       return newArr;
     case "UPDATE":
       return state.map((food) => {
-        if (food.id === action.id) {
+        if (food.id === action.id && food.size === action.size) {
           return {
             ...food,
             qty: parseInt(action.qty) + food.qty,
@@ -32,6 +32,7 @@ const reducer = (state, action) => {
         }
         return food;
       });
+
     case "DROP":
       let empArray = [];
       return empArray;

@@ -13,7 +13,7 @@ export default function Carousel({ search, setSearch }) {
           <div className="carousel-caption" style={{ zIndex: "2" }}>
             <div className="d-flex justify-content-center">
               <input
-                className="form-control me-2"
+                className="form-control"
                 type="search"
                 placeholder="Search"
                 value={search}
@@ -32,7 +32,8 @@ export default function Carousel({ search, setSearch }) {
           </div>
           <div className="carousel-item active">
             <img
-              src="https://source.unsplash.com/random/1800x600/?burger"
+              // src="https://source.unsplash.com/random/1800x600/?burger"
+              src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=1800&h=600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               className="d-block w-100"
               alt="..."
               style={{ filter: "brightness(30%)" }}
@@ -40,7 +41,7 @@ export default function Carousel({ search, setSearch }) {
           </div>
           <div className="carousel-item">
             <img
-              src="https://source.unsplash.com/random/1800x600/?pizza"
+              src="https://images.unsplash.com/photo-1558030137-a56c1b004fa3?q=80&w=1800&h=600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               className="d-block w-100"
               alt="..."
               style={{ filter: "brightness(30%)" }}
@@ -48,7 +49,15 @@ export default function Carousel({ search, setSearch }) {
           </div>
           <div className="carousel-item">
             <img
-              src="https://source.unsplash.com/random/1800x600/?cake"
+              src="https://plus.unsplash.com/premium_photo-1667682942148-a0c98d1d70db?q=80&w=1800&h=600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              className="d-block w-100"
+              alt="..."
+              style={{ filter: "brightness(30%)" }}
+            />
+          </div>
+          <div className="carousel-item">
+            <img
+              src="https://images.unsplash.com/photo-1605807646983-377bc5a76493?q=80&w=1800&h=600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               className="d-block w-100"
               alt="..."
               style={{ filter: "brightness(30%)" }}
