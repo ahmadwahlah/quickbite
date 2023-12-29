@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 
 export default function MyOrders() {
   const [orderData, setOrderData] = useState("");
@@ -33,7 +32,7 @@ export default function MyOrders() {
         <Navbar />
       </div>
       <div className="container">
-        <div className="row">
+        <div className="row mb-5">
           {orderData.length !== 0
             ? Array(orderData).map((data) => {
                 return data.orderData
@@ -42,68 +41,66 @@ export default function MyOrders() {
                       .reverse()
                       .map((item) => {
                         return item.map((arrayData, i) => {
-                          return (
-                            <div key={i}>
-                              {arrayData.Order_date ? (
-                                <div className="m-auto mt-5">
+                          if (arrayData.Order_date) {
+                            // Display full row for date
+                            return (
+                              <div key={i} className="m-auto mt-5">
+                                <div className="ms-2 fs-5">
                                   {(data = arrayData.Order_date)}
-                                  <hr />
                                 </div>
-                              ) : (
+                                <hr className="bg-success" />
+                              </div>
+                            );
+                          } else {
+                            // Display three items in one row with spacing
+                            return (
+                              <div
+                                key={i}
+                                className="col-12 col-md-6 col-lg-3 d-flex align-items-center justify-content-center "
+                              >
                                 <div
-                                  key={i}
-                                  className="col-12 col-md-6 col-lg-3"
+                                  className="card mt-3 border-success"
+                                  style={{ width: "95%", maxHeight: "" }}
                                 >
-                                  <div
-                                    className="card mt-3"
-                                    style={{
-                                      width: "16rem",
-                                      maxHeight: "360px",
-                                    }}
-                                  >
-                                    {/* <img
-                                      src={arrayData.img}
-                                      className="card-img-top"
-                                      alt="..."
-                                      style={{
-                                        height: "120px",
-                                        objectFit: "fill",
-                                      }}
-                                    /> */}
-                                    <div className="card-body">
-                                      <h5 className="card-title">
-                                        {arrayData.name}
-                                      </h5>
-                                      <div
-                                        className="container w-100 p-0"
-                                        style={{ height: "38px" }}
-                                      >
-                                        <span className="m-1">
+                                  <img
+                                    src={arrayData.img}
+                                    className="card-img-top"
+                                    alt="..."
+                                  />
+                                  <div className="card-body">
+                                    <h5 className="card-title fs-5">
+                                      {arrayData.name}
+                                    </h5>
+                                    <div className="container  p-0 d-flex justify-content-between">
+                                      <div className="d">
+                                        <span className=" fs-6">
                                           {arrayData.qty}
                                         </span>
-                                        <span className="m-1">
+                                        <span className="ms-2 fs-6">
                                           {arrayData.size}
                                         </span>
-                                        <span className="m-1">{data}</span>
-                                        <div className=" d-inline ms-2 h-100 w-20 fs-5">
-                                          PKR {arrayData.price}/-
-                                        </div>
+                                      </div>
+                                      <div className="ms-2 h-100  fs-6">
+                                        PKR {arrayData.price}/-
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                              )}
-                            </div>
-                          );
+                              </div>
+                            );
+                          }
                         });
                       })
                   : "";
               })
             : ""}
+          {!orderData.orderData && (
+            <div className="text-center my-5 fs-2 text-success">
+              <div className="m-5"></div>
+              No orders yet. Explore our menu and start ordering!
+            </div>
+          )}
         </div>
-      </div>
-      <div>
-        <Footer />
       </div>
     </>
   );

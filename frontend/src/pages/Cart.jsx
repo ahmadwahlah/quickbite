@@ -35,7 +35,11 @@ export default function Cart() {
       body: JSON.stringify({
         order_data: data,
         email: userEmail,
-        order_date: new Date().toDateString(),
+        order_date: new Date().toLocaleString("en-US", {
+          dateStyle: "full",
+          timeStyle: "medium",
+          timeZone: "Asia/Karachi",
+        }),
       }),
     });
 
